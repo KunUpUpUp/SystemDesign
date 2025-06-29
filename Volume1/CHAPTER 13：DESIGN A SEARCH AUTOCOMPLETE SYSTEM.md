@@ -62,7 +62,7 @@
   4. `search?q=dinn`
   5. `search?q=dinne`
   6. `search?q=dinner`
-* $$QPS \approx 24,000次/秒 = 10,000,000用户 \times 10次/天 \times 20个字符/24小时/3600秒 $$。
+* $$QPS = 10,000,000用户 \times 10次/天 \times 20个字符/24小时/3600秒 \approx 24,000次/秒  $$
 * $$峰值QPS = QPS \times 2 \approx 48,000$$
 * 假设 20% 的日常查询是新的。 $$1000 万 \times 10 个查询/天 \times 每个查询 20 字节 \times 20 \% = 0.4 GB$$。 这意味着每天有 0.4GB 的新数据被添加到存储中。
 
