@@ -115,7 +115,7 @@ API端点促进了客户和服务器之间的通信。我们将设计REST风格�
 
 **哈希值的长度**
 
-hashValue 由\[0-9, a-z, A-Z]中的字符组成，包含 $$10+26+26=62$$ 个可能的字符。要计算 hashValue 的长度，请找出最小的 n，使 $$62^n \ge 365亿$$。根据估计，系统必须支持多达 3650 亿个 URL。 表 8-1 显示了 hashValue 的长度和它可以支持的相应的最大 URL 数。
+hashValue 由\[0-9, a-z, A-Z]中的字符组成，包含 $$10+26+26=62$$ 个可能的字符。要计算 hashValue 的长度，请找出最小的 n，使 $$62^n \ge 3650亿$$。根据估计，系统必须支持多达 3650 亿个 URL。 表 8-1 显示了 hashValue 的长度和它可以支持的相应的最大 URL 数。
 
 ![](../images/chapter8/table8-1.jpg)
 
@@ -143,11 +143,12 @@ Base 转换是 URL 缩短器常用的另一种方法。 Base 转换有助于在�
 
 
 * 从名字上看，base 62 是一种使用 62 个字符进行编码的方式。 映射是： 0-0, ..., 9-9, 10-a, 11-b, ..., 35-z, 36-A, ..., 61-Z，其中“a”代表 10，“Z” ' 代表 61，等等。
-* $$11157_{10} = 2 \times 62^2 + 55 \times 62^1 + 59 \times 62^0 = \left [2, 55, 59 \right ] \rightarrow \left [2, T, X \right]$$ 以 base 62 表示。
+* $$11157_{10} = 2 \times 62^2 + 55 \times 62^1 + 59 \times 62^0 = \left [2, 55, 59 \right ] \rightarrow \left [2, T, X \right]$$ 
+以 base 62 表示。
 
     对话过程如图8-6所示。
 
-    ![](../images/chapter8/figure8-6.jpg)
+![](../images/chapter8/figure8-6.jpg)
 * 因此，短网址是：https://tinyurl.com/2TX
 
 **两种方法的比较**
