@@ -106,9 +106,9 @@
 
 图3-1和图3-2分别展示了订阅发布和新闻订阅构建流程的高层设计。
 
-![](images/chapter3/figure3-1.jpg)
+![](../images/chapter3/figure3-1.jpg)
 
-![](images/chapter3/figure3-2.jpg)
+![](../images/chapter3/figure3-2.jpg)
 
 #### 第3步：深入设计
 
@@ -132,9 +132,9 @@
 
 图3-3和图3-4显示了两个用例的详细设计，这将在第11章中详细说明
 
-![](images/chapter3/figure3-3.jpg)
+![](../images/chapter3/figure3-3.jpg)
 
-![](images/chapter3/figure3-4.jpg)
+![](../images/chapter3/figure3-4.jpg)
 
 #### 第4步：总结
 

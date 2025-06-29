@@ -5,7 +5,7 @@
 
 网络爬虫被称为机器人或蜘蛛。搜索引擎广泛使用它来发现 Web 上的新内容或更新内容。内容可以是网页、图像、视频、PDF 文件等。网络爬虫首先收集一些网页，然后按照这些页面上的链接收集新内容。图 9-1 显示了抓取过程的可视化示例。
 
-![](images/chapter9/figure9-1.jpg)
+![](../images/chapter9/figure9-1.jpg)
 
 爬虫有多种用途：
 
@@ -74,7 +74,7 @@
 
 一旦需求明确了，我们就开始进行高层设计。受以前关于网络抓取的研究\[4]\[5]的启发，我们提出了一个高层设计，如图9-2所示。
 
-![](images/chapter9/figure9-2.jpg)
+![](../images/chapter9/figure9-2.jpg)
 
 首先，我们探索每个设计组件以了解它们的功能。然后，我们逐步检查爬虫工作流程。
 
@@ -117,7 +117,7 @@ HTML Downloader 从互联网上下载网页。这些URL是由URL Frontier提供�
 
 URL Extractor（网址提取器） 从 HTML 页面解析和提取链接。图 9-3 显示了链接提取过程的示例。通过添加“[https://en.wikipedia.org](https://en.wikipedia.org/)”前缀将相对路径转换为绝对 URL。
 
-![](images/chapter9/figure9-3.jpg)
+![](../images/chapter9/figure9-3.jpg)
 
 #### URL Filter
 
@@ -137,7 +137,7 @@ URL Storage 存储已经访问过的 URL。到目前为止，我们已经讨论�
 
 为了更好地逐步解释工作流程，在设计图中添加了序列号，如图 9-4 所示。
 
-![](images/chapter9/figure9-4.jpg)
+![](../images/chapter9/figure9-4.jpg)
 
 第 1 步：将种子 URL 添加到 URL Frontier
 
@@ -183,7 +183,7 @@ BFS 通常被网络爬虫使用，并通过先进先出 (FIFO) 队列实现。�
 
 1.  来自同一网页的大多数链接都链接回同一主机。在图 9-5 中，[wikipedia.com](http://wikipedia.com/) 中的所有链接都是内部链接，使得爬虫忙于处理来自同一主机（[wikipedia.com](http://wikipedia.com/)）的 URL。当爬虫试图并行下载网页时，维基百科服务器将被请求淹没。这被认为是“不礼貌的”
 
-    ![](images/chapter9/figure9-5.jpg)
+    ![](../images/chapter9/figure9-5.jpg)
 2. 标准的BFS没有考虑到一个URL的优先级。网络很大，不是每个页面都有相同的质量和重要性。因此，我们可能希望根据页面排名、网络流量、更新频率等来确定URL的优先级。
 
 #### URL Frontier
@@ -196,12 +196,12 @@ URL Frontier 有助于解决这些问题。 URL Frontier 是一种存储要下�
 
     强制礼貌的一般想法是一次从同一主机下载一个页面。可以在两个下载任务之间添加延迟。礼貌约束是通过维护从网站主机名到下载（工作）线程的映射来实现的。每个下载线程都有一个单独的 FIFO 队列，并且只下载从该队列中获得的 URL。图 9-6 显示了管理礼貌的设计。
 
-    ![](images/chapter9/figure9-6.jpg)
+    ![](../images/chapter9/figure9-6.jpg)
 
     * Queue router：它确保每个队列（b1，b2，... bn）仅包含来自同一主机的 URL。
     *   Mapping table:：它将每个主机映射到一个队列
 
-        ![](images/chapter9/table9-1.jpg)
+        ![](../images/chapter9/table9-1.jpg)
     * FIFO 队列 b1、b2 到 bn：每个队列包含来自同一主机的 URL。
     * Queue selector：每个工作线程都映射到一个 FIFO 队列，它只从该队列下载 URL。队列选择逻辑由Queue selector完成
     * Worker thread 1 t到 N：一个工作线程从同一台主机上一个接一个地下载网页，可以在两个下载任务之间添加延迟。
@@ -213,7 +213,7 @@ URL Frontier 有助于解决这些问题。 URL Frontier 是一种存储要下�
 
     图 9-7 显示了管理 URL 优先级的设计。
 
-    ![](images/chapter9/figure9-7.jpg)
+    ![](../images/chapter9/figure9-7.jpg)
 
     * Prioritizer：它将 URL 作为输入并计算优先级。 •
     * Queue f1 到 fn:：每个队列都有一个分配的优先级。优先级高的队列被选中的概率更高。
@@ -224,7 +224,7 @@ URL Frontier 有助于解决这些问题。 URL Frontier 是一种存储要下�
     * 前端队列：管理优先级
     * 后端队列：管理礼貌
 
-    ![](images/chapter9/figure9-8.jpg)
+    ![](../images/chapter9/figure9-8.jpg)
 *   新鲜度
 
     网页不断被添加、删除和编辑。网络爬虫必须定期重新抓取下载的页面以保持我们的数据集最新。重新抓取所有 URL 既耗时又耗费资源。下面列出了几种优化新鲜度的策略：
@@ -262,7 +262,7 @@ Disallow: /gp/aw/cr/
 
     为了实现高性能，抓取工作被分配到多个服务器，每个服务器运行多个线程。URL空间被分割成更小的部分；因此，每个下载器负责URL的一个子集。图9-9显示了一个分布式抓取的例子。
 
-    ![](images/chapter9/figure9-9.jpg)
+    ![](../images/chapter9/figure9-9.jpg)
 2.  缓存DNS解析器
 
     DNS解析器是爬虫的一个瓶颈，因为由于许多DNS接口的同步性，DNS请求可能需要时间。DNS响应时间从10ms到200ms不等。一旦爬虫线程对DNS进行了请求，其他线程就会被阻断，直到第一个请求完成。维护我们的DNS缓存以避免频繁调用DNS是一种有效的速度优化技术。我们的DNS缓存保持域名到IP地址的映射，并通过cron作业定期更新。
@@ -286,7 +286,7 @@ Disallow: /gp/aw/cr/
 
 差不多每个系统都在不断发展，设计目标之一是使系统足够灵活，以支持新的内容类型。抓取器可以通过插入新的模块来扩展。图9-10显示了如何添加新模块。
 
-![](images/chapter9/figure9-10.jpg)
+![](../images/chapter9/figure9-10.jpg)
 
 * PNG下载器模块是用于下载PNG文件的插件。
 * 增加了网络监控模块，以监控网络并防止版权和商标侵权。

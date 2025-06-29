@@ -5,7 +5,7 @@
 
 通知不仅仅是移动推送通知，三种类型的通知格式：移动推送通知、短信和电子邮件。 图 10-1 显示了每个通知的示例。
 
-![](images/chapter10/figure10-1.jpg)
+![](../images/chapter10/figure10-1.jpg)
 
 ### 第1步：了解问题并确定设计范围
 
@@ -47,7 +47,7 @@
 
 **iOS推送通知**
 
-![](images/chapter10/figure10-2.jpg)
+![](../images/chapter10/figure10-2.jpg)
 
 我们主要需要三个组件来发送 iOS 推送通知：
 
@@ -74,33 +74,33 @@
 
 Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常用于向 Android 设备发送推送通知，而不是使用 APN。
 
-![](images/chapter10/figure10-3.jpg)
+![](../images/chapter10/figure10-3.jpg)
 
 **短信**
 
 对于SMS信息，通常使用第三方SMS服务，如Twilio\[1]、Nexmo\[2]和其他许多服务。它们中的大多数是商业服务。
 
-![](images/chapter10/figure10-4.jpg)
+![](../images/chapter10/figure10-4.jpg)
 
 **邮件**
 
 虽然公司可以设置自己的电子邮件服务器，但其中许多公司选择商业电子邮件服务。 Sendgrid \[3] 和 Mailchimp \[4] 是最受欢迎的电子邮件服务之一，它们提供更好的交付率和数据分析。
 
-![](images/chapter10/figure10-5.jpg)
+![](../images/chapter10/figure10-5.jpg)
 
 图 10-6 显示了包含所有第三方服务后的设计。
 
-![](images/chapter10/figure10-6.jpg)
+![](../images/chapter10/figure10-6.jpg)
 
 #### 联系人信息收集流程
 
 要发送通知，我们需要收集移动设备令牌、电话号码或电子邮件地址。 如图 10-7 所示，当用户安装我们的应用程序或首次注册时，API 服务器会收集用户联系信息并将其存储在数据库中。
 
-![](images/chapter10/figure10-7.jpg)
+![](../images/chapter10/figure10-7.jpg)
 
 图10-8显示了存储联系人信息的简化数据库表。电子邮件地址和电话号码存储在用户表中，而设备令牌则存储在设备表中。一个用户可以有多个设备，表明推送通知可以被发送到所有的用户设备上。
 
-![](images/chapter10/figure10-8.jpg)
+![](../images/chapter10/figure10-8.jpg)
 
 #### 通知发送/接收流程
 
@@ -110,7 +110,7 @@ Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常�
 
 图 10-9 显示了设计，下面解释了每个系统组件。
 
-![](images/chapter10/figure10-9.jpg)
+![](../images/chapter10/figure10-9.jpg)
 
 **服务1到N**：一个服务可以是一个微服务，一个cron job，或者一个触发通知发送事件的分布式系统。例如，一个计费服务发送电子邮件提醒客户到期付款，或者一个购物网站通过短信告诉客户他们的包裹明天会被送到。
 
@@ -136,7 +136,7 @@ Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常�
 
 图10-10显示了改进后的高层设计。
 
-![](images/chapter10/figure10-10.jpg)
+![](../images/chapter10/figure10-10.jpg)
 
 浏览上图的最佳方式是从左到右。
 
@@ -153,7 +153,7 @@ Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常�
 
       Request body：
 
-      ![](images/chapter10/figure10-hello.jpg)
+      ![](../images/chapter10/figure10-hello.jpg)
 * **缓存**：用户信息、设备信息、通知模板都被缓存了。
 * **数据库**：它存储了关于用户、通知、设置等方面的数据。
 * **消息队列**：它们消除了组件之间的依赖性。当大量的通知被发送出去时，消息队列可以作为缓冲区。每种通知类型都被分配了一个不同的消息队列，所以一个第三方服务的中断不会影响其他通知类型。
@@ -186,7 +186,7 @@ Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常�
 
 通知系统最重要的要求之一是它不能丢失数据。 通知通常可以延迟或重新排序，但绝不会丢失。 为了满足这个需求，通知系统**将通知数据持久化到数据库**中，并实现了重试机制。 包含通知日志数据库以实现数据持久化，如图 10-11 所示。
 
-![](images/chapter10/figure10-11.jpg)
+![](../images/chapter10/figure10-11.jpg)
 
 **接受者只会收到一次通知吗？**
 
@@ -234,18 +234,18 @@ Android 采用了类似的通知流程。 Firebase Cloud Messaging (FCM) 通常�
 
     要监控的一个关键指标是排队通知的总数。如果这个数字很大，说明 workers 处理通知事件的速度不够快。为了避免通知交付的延迟，需要更多的工作者。图10-12（归功于\[7]）显示了一个待处理的排队消息的例子。
 
-    ![](images/chapter10/figure10-12.jpg)
+    ![](../images/chapter10/figure10-12.jpg)
 *   事件跟踪
 
     打开率、点击率和参与度等通知指标对于了解客户行为非常重要。 分析服务实现事件跟踪。 通常需要通知系统和分析服务之间的集成。 图 10-13 显示了可能出于分析目的而被跟踪的事件示例。
 
-    ![](images/chapter10/figure10-13.jpg)
+    ![](../images/chapter10/figure10-13.jpg)
 
 #### 更新后的设计
 
 把所有东西放在一起，图10-14显示了更新的通知系统设计。
 
-![](images/chapter10/figure10-14.jpg)
+![](../images/chapter10/figure10-14.jpg)
 
 在这个设计中，与以前的设计相比，增加了许多新的组件。
 

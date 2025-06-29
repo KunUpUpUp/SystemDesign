@@ -68,11 +68,11 @@ API端点促进了客户和服务器之间的通信。我们将设计REST风格�
 
 图8-1显示了当你在浏览器上输入一个tinyurl时会发生什么。一旦服务器收到tinyurl请求，它就会用301重定向将短网址改为长网址。
 
-![](images/chapter8/figure8-1.jpg)
+![](../images/chapter8/figure8-1.jpg)
 
 客户端和服务器之间的详细通信情况如图8-2所示。
 
-![](images/chapter8/figure8-2.jpg)
+![](../images/chapter8/figure8-2.jpg)
 
 值得在这里讨论的一件事是 301 重定向与 302 重定向。
 
@@ -90,7 +90,7 @@ API端点促进了客户和服务器之间的通信。我们将设计REST风格�
 
 让我们假设短的URL看起来像这样：`www.tinyurl.com/{hashValue}`。为了支持缩短URL的用例，我们必须找到一个哈希函数fx，将长URL映射到hashValue，如图8-3所示。
 
-![](images/chapter8/figure8-3.jpg)
+![](../images/chapter8/figure8-3.jpg)
 
 哈希函数必须满足以下要求。
 
@@ -107,7 +107,7 @@ API端点促进了客户和服务器之间的通信。我们将设计REST风格�
 
 在高层设计中，所有的东西都存储在一个哈希表中。这是一个很好的起点；然而，这种方法在现实世界的系统中是不可行的，因为内存资源是有限的和昂贵的。一个更好的选择是将\<shortURL, longURL>映射存储在一个关系数据库中。图8-4显示了一个简单的数据库表设计。简化版的表包含3列：id、shortURL、longURL。
 
-![](images/chapter8/figure8-4.jpg)
+![](../images/chapter8/figure8-4.jpg)
 
 #### 哈希函数
 
@@ -117,7 +117,7 @@ API端点促进了客户和服务器之间的通信。我们将设计REST风格�
 
 hashValue 由\[0-9, a-z, A-Z]中的字符组成，包含 $$10+26+26=62$$ 个可能的字符。要计算 hashValue 的长度，请找出最小的 n，使 $$62^n \ge 365亿$$。根据估计，系统必须支持多达 3650 亿个 URL。 表 8-1 显示了 hashValue 的长度和它可以支持的相应的最大 URL 数。
 
-![](images/chapter8/table8-1.jpg)
+![](../images/chapter8/table8-1.jpg)
 
 当 $$n = 7$$ 时， $$62 ^ n \approx 3.5万亿$$，3.5 万亿足以容纳 3650亿个URL，所以 hashValue 的长度为 7。
 
@@ -127,13 +127,13 @@ hashValue 由\[0-9, a-z, A-Z]中的字符组成，包含 $$10+26+26=62$$ 个可�
 
 为了缩短长的URL，我们应该实现一个散列函数，将长的URL散列成一个7个字符的字符串。一个直接的解决方案是使用知名的哈希函数，如CRC32、MD5或SHA-1。下表比较了在这个URL（[https://en.wikipedia.org/wiki/Systems\_design](https://en.wikipedia.org/wiki/Systems\_design)）上应用不同哈希函数后的哈希结果：
 
-![](images/chapter8/table8-2.jpg)
+![](../images/chapter8/table8-2.jpg)
 
 如表8-2所示，即使是最短的哈希值（来自CRC32）也太长了（超过7个字符）。我们怎样才能使它更短呢？
 
 第一种方法是收集哈希值的前7个字符；然而，这种方法会导致哈希碰撞。为了解决哈希碰撞，我们可以递归地追加一个新的预定义字符串，直到不再发现碰撞。这一过程在图8-5中得到了解释。
 
-![](images/chapter8/figure8-5.jpg)
+![](../images/chapter8/figure8-5.jpg)
 
 这种方法可以消除碰撞；但是，查询数据库以检查每个请求是否存在短网址的成本很高。一种叫做**Bloom过滤器**的技术\[2]可以提高性能。布隆过滤器是一种空间效率高的概率技术，用来测试一个元素是否是一个集合的成员。更多细节请参考参考资料\[2]。
 
@@ -147,7 +147,7 @@ Base 转换是 URL 缩短器常用的另一种方法。 Base 转换有助于在�
 
     对话过程如图8-6所示。
 
-    ![](images/chapter8/figure8-6.jpg)
+    ![](../images/chapter8/figure8-6.jpg)
 * 因此，短网址是：https://tinyurl.com/2TX
 
 **两种方法的比较**
@@ -165,7 +165,7 @@ Base 转换是 URL 缩短器常用的另一种方法。 Base 转换有助于在�
 
 作为系统的核心部分之一，我们希望URL缩短的流程在逻辑上是简单和实用的。在我们的设计中使用了62进制转换。我们建立了以下图表（图8-7）来演示这个流程。
 
-![](images/chapter8/figure8-7.jpg)
+![](../images/chapter8/figure8-7.jpg)
 
 1. longURL 是输入的
 2. 系统检查 longURL 是否存在于数据库中
@@ -181,7 +181,7 @@ Base 转换是 URL 缩短器常用的另一种方法。 Base 转换有助于在�
 * 使用62进制转换将ID转换为shortURL。ID（2009215674938）被转换为 "zn9edcu"。
 *   将ID、shortURL和longURL保存到数据库，如表8-4所示。
 
-    ![](images/chapter8/table8-4.jpg)
+    ![](../images/chapter8/table8-4.jpg)
 
 值得一提的是分布式唯一 ID 生成器。 它的主要功能是生成全局唯一 ID，用于创建 shortURL。 在高度分布式的环境中，实现唯一 ID 生成器具有挑战性。 幸运的是，我们已经在“第 7 章：在分布式系统中设计唯一 ID 生成器”中讨论了一些解决方案。 你可以回过头来回顾它来刷新你的记忆。
 
@@ -189,7 +189,7 @@ Base 转换是 URL 缩短器常用的另一种方法。 Base 转换有助于在�
 
 图 8-8 显示了 URL 重定向的详细设计。 由于读取多于写入，`<shortURL, longURL>` 映射存储在缓存中以提高性能。
 
-![](images/chapter8/figure8-8.jpg)
+![](../images/chapter8/figure8-8.jpg)
 
 URL重定向的流程总结如下：
 

@@ -3,7 +3,7 @@
 
 在本章中，您需要设计一个信息推送系统。 什么是信息推送？ 根据 Facebook 帮助页面，“动态是位于首页中间不断更新的动态列表。动态包括您在 Facebook 上关注的用户、公共主页和小组发布的状态更新、照片、视频、链接、应用事件和点赞。”\[1]。 这是一个流行的面试问题。 类似的常见问题有：设计 Facebook 信息推送、Instagram 推送、Twitter 时间线等。
 
-![](images/chapter11/figure11-1.jpg)
+![](../images/chapter11/figure11-1.jpg)
 
 ### 第1步：了解问题并确定设计范围
 
@@ -76,7 +76,7 @@
 
 图11-2显示了发布流程的高层设计。
 
-![](images/chapter11/figure11-2.jpg)
+![](../images/chapter11/figure11-2.jpg)
 
 * **User（用户）**：用户可以在浏览器或移动应用程序上查看信息流。一个用户通过API发布内容为 "你好 "的帖子： `/v1/me/feed?content=Hello&auth_token={auth_token}`
 * Load balancer（负载均衡器）：将流量分配给网络服务器。
@@ -91,7 +91,7 @@
 
 图11-3显示了高层设计。
 
-![](images/chapter11/figure11-3.jpg)
+![](../images/chapter11/figure11-3.jpg)
 
 * User（用户）：一个用户发送了一个请求来检索她的信息。 该请求看起来像这样：`/v1/me/feed`。
 * Load balancer（负载均衡器）：将流量分配给网络服务器。
@@ -107,7 +107,7 @@
 
 图 11-4 概述了信息发布的详细设计。我们已经讨论了高层次设计中的大部分组件，我们将重点关注两个组件：Web 服务器和扇出服务。
 
-![](images/chapter11/figure11-4.jpg)
+![](../images/chapter11/figure11-4.jpg)
 
 **web 服务**
 
@@ -148,7 +148,7 @@ Fanout 是将帖子传递给所有朋友的过程。两种类型的扇出模型�
 
 让我们仔细看看图11-5中所示的扇出服务。
 
-![](images/chapter11/figure11-5.jpg)
+![](../images/chapter11/figure11-5.jpg)
 
 扇出服务的工作原理如下：
 
@@ -158,13 +158,13 @@ Fanout 是将帖子传递给所有朋友的过程。两种类型的扇出模型�
 4. Fanout worker 从消息队列中获取数据并将信息流数据存储在信息流缓存中。 你可以将信息流缓存视为一个 `<post_id, user_id>` 结构的映射表。 每当发布新帖子时，新帖子将被追加到信息流表中，如图 11-6 所示。 如果我们将整个用户和帖子对象存储在缓存中，内存消耗会变得非常大。 因此，仅存储 ID。 为了保持较小的内存大小，我们设置了一个可配置的限制。 用户滚动浏览信息流中数千个帖子的机会很小。 大多数用户只对最新的内容感兴趣，所以缓存未命中率低。
 5. 将 `<post_id, user_id>` 存储在信息流缓存中。 图 11-6 显示了缓存中信息流的示例。
 
-    ![](images/chapter11/figure11-6.jpg)
+    ![](../images/chapter11/figure11-6.jpg)
 
 #### 信息源检索深入研究
 
 图 11-7 说明了信息检索的详细设计。
 
-![](images/chapter11/figure11-7.jpg)
+![](../images/chapter11/figure11-7.jpg)
 
 如图11-7所示，媒体内容（图片、视频等）存储在CDN中，便于快速检索。 让我们看看客户端如何检索信息流。
 
@@ -179,7 +179,7 @@ Fanout 是将帖子传递给所有朋友的过程。两种类型的扇出模型�
 
     缓存对于信息流系统非常重要。 我们将缓存层分为 5 层，如图 11-8 所示。
 
-    ![](images/chapter11/figure11-8.jpg)
+    ![](../images/chapter11/figure11-8.jpg)
 
     * News Feed：它存储了信息的ID。
     * Content：它存储每个帖子的数据。受欢迎的内容被存储在热缓存中。
